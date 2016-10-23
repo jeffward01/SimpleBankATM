@@ -40,8 +40,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="ITransactionValidator.cs" />
+    <Compile Include="Managers\AccountManager.cs" />
+    <Compile Include="Managers\CustomerManager.cs" />
+    <Compile Include="Managers\ICustomerManager.cs" />
+    <Compile Include="Managers\TransactionManager.cs" />
+    <Compile Include="TransactionHandler.cs" />
+    <Compile Include="TransactionValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleBankATM.Data\SimpleBankATM.Data.csproj">
+      <Project>{C6B6F09A-8E13-4DC4-A764-9A1A41AF82F4}</Project>
+      <Name>SimpleBankATM.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SimpleBankATM.Models\SimpleBankATM.Models.csproj">
+      <Project>{434C6176-C7E4-41D7-930B-63AE25654938}</Project>
+      <Name>SimpleBankATM.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -84,6 +84,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SimpleBankATM.Business\SimpleBankATM.Business.csproj">
+      <Project>{19DD42F9-52F6-4205-9849-72D1D8530336}</Project>
+      <Name>SimpleBankATM.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SimpleBankATM.Data\SimpleBankATM.Data.csproj">
       <Project>{C6B6F09A-8E13-4DC4-A764-9A1A41AF82F4}</Project>
       <Name>SimpleBankATM.Data</Name>

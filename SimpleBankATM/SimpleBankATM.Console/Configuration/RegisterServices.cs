@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac;
+using SimpleBankATM.Business;
 using SimpleBankATM.Data;
 using SimpleBankATM.Data.Infrastructure;
 using SimpleBankATM.Data.Repositories;
@@ -23,6 +24,10 @@ namespace SimpleBankATM.Console.Configuration
             //Applicaion 
             builder.RegisterType<Application>().As<IApplication>();
 
+            //Validation
+            builder.RegisterType<TransactionValidator>().As<ITransactionValidator>();
+
+
             //Services
 
 
@@ -30,6 +35,8 @@ namespace SimpleBankATM.Console.Configuration
             //Repositories
             builder.RegisterType<CustomerRepository>().As<ICustomerRepository>();
             builder.RegisterType<AuthRepository>().As<IAuthRepository>();
+            builder.RegisterType<AccountRepository>().As<IAccountRepository>();
+            builder.RegisterType<TransactionRepository>().As<ITransactionRepository>();
 
 
 
