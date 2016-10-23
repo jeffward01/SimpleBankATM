@@ -37,6 +37,19 @@ namespace SimpleBankATM.Data.Repositories
             return _dataContext.Accounts.Where(_ => _.Deleted == null && _.CustomerId == customerId).ToList();
         }
 
+        public bool DoesAccountNumberExist(string accountNumber)
+        {
+            var account = _dataContext.Accounts.FirstOrDefault(_ => _.AccountNumber == accountNumber);
+            if (account == null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         //Create
         public Account CreateAccount(Account account)
         {

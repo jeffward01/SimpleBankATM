@@ -15,12 +15,13 @@ namespace SimpleBankATM.Data.Repositories
 
         IList<Account> GetAllAccountsForCustomerId(int customerId);
 
-
         Account UpdateAccount(Account account);
 
         bool DeleteAccount(int accountId);
 
         string GetAccountIdByAccountNumber(string accountNumber);
+
+        bool DoesAccountNumberExist(string accountNumber);
 
         bool DeleteAccountByAccountNumber(string accountNumber);
     }

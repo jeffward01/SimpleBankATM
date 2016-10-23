@@ -2,12 +2,18 @@
 
 namespace SimpleBankATM.Business
 {
-    public static class TransactionHandler
+    public class TransactionHandler : ITransactionHandler
     {
-        public static TransactionStatus IsValid(int count, int accountId, TransactionType transactionType)
+        public TransactionStatus IsValidTransaction(Transaction transaction, TransactionType transactionType)
         {
-            var transactionValidator = new TransactionValidator(count, accountId, transactionType);
-            return transactionValidator.isValidTransaction();
+            var transactionValidator = new TransactionValidator(transaction, transactionType);
+            return transactionValidator.IsValidTransaction();
+        }
+
+        public TransactionStatus IsValidUpdateTransaction(Transaction transaction, TransactionType transactionType)
+        {
+            var transactionValidator = new TransactionValidator(transaction, transactionType);
+            return transactionValidator.IsValidUpdateTransaction();
         }
     }
 }

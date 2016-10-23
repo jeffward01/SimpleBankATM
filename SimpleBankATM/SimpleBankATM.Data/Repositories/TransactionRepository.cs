@@ -26,33 +26,33 @@ namespace SimpleBankATM.Data.Repositories
         }
 
         //Create
-        public Transaction CreateTransaction(Transaction Transaction)
+        public Transaction CreateTransaction(Transaction transaction)
         {
-            _dataContext.Transactions.Add(Transaction);
+            _dataContext.Transactions.Add(transaction);
             _dataContext.SaveChanges();
-            return Transaction;
+            return transaction;
         }
 
         //Update
-        public Transaction UpdateTransaction(Transaction Transaction)
+        public Transaction UpdateTransaction(Transaction transaction)
         {
-            _dataContext.SetModified(Transaction);
+            _dataContext.SetModified(transaction);
             _dataContext.SaveChanges();
-            return _dataContext.Transactions.FirstOrDefault(_ => _.TransactionId == Transaction.TransactionId);
+            return _dataContext.Transactions.FirstOrDefault(_ => _.TransactionId == transaction.TransactionId);
         }
 
         //Delete
-        public bool DeleteTransaction(int TransactionId)
+        public bool DeleteTransaction(int transactionId)
         {
-            var Transaction = _dataContext.Transactions.FirstOrDefault(_ => _.TransactionId == TransactionId);
-            if (Transaction == null)
+            var transaction = _dataContext.Transactions.FirstOrDefault(_ => _.TransactionId == transactionId);
+            if (transaction == null)
             {
                 return false;
             }
             try
             {
-                Transaction.Deleted = DateTime.Now;
-                _dataContext.SetModified(Transaction);
+                transaction.Deleted = DateTime.Now;
+                _dataContext.SetModified(transaction);
 
                 _dataContext.SaveChanges();
             }

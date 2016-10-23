@@ -34,7 +34,7 @@ namespace SimpleBankATM.Data.Repositories
             {
                 _dataContext.SaveChanges();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }
@@ -73,8 +73,8 @@ namespace SimpleBankATM.Data.Repositories
             try
             {
                 user.Deleted = DateTime.Now;
-            _dataContext.SetModified(user);
-           
+                _dataContext.SetModified(user);
+
                 _dataContext.SaveChanges();
             }
             catch (Exception)

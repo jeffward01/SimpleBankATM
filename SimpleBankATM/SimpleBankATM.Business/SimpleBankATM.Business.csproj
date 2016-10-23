@@ -40,10 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ITransactionHandler.cs" />
     <Compile Include="ITransactionValidator.cs" />
+    <Compile Include="LocalBankInformation.cs" />
     <Compile Include="Managers\AccountManager.cs" />
     <Compile Include="Managers\CustomerManager.cs" />
+    <Compile Include="Managers\IAccountManager.cs" />
     <Compile Include="Managers\ICustomerManager.cs" />
+    <Compile Include="Managers\ITransactionManager.cs" />
     <Compile Include="Managers\TransactionManager.cs" />
     <Compile Include="TransactionHandler.cs" />
     <Compile Include="TransactionValidator.cs" />

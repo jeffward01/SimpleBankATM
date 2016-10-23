@@ -4,25 +4,31 @@ using System;
 
 namespace SimpleBankATM.Business
 {
-    public class TransactionValidator
+    public class TransactionValidator : ITransactionValidator
     {
         private readonly IAccountRepository _accountRepository;
+
+        private readonly ITransactionRepository _transactionRepository;
 
         private readonly decimal _transactionAmount;
 
         private readonly Account _accountInformation;
 
+        private readonly Transaction _transactionInformation;
+
         private readonly TransactionType _transactionType;
 
-        public TransactionValidator(int transactionAmount, int accountId, TransactionType transactionType)
+        public TransactionValidator(Transaction transaction, TransactionType transactionType)
         {
             _accountRepository = new AccountRepository();
-            _transactionAmount = transactionAmount;
-            _accountInformation = _accountRepository.GetAccountById(accountId);
+            _transactionRepository = new TransactionRepository();
+            _transactionAmount = transaction.TransactionAmount;
+            _transactionInformation = transaction;
+            _accountInformation = _accountRepository.GetAccountById(transaction.AccountId);
             _transactionType = transactionType;
         }
 
-        public TransactionStatus isValidTransaction()
+        public TransactionStatus IsValidTransaction()
         {
             var transactionStatus = new TransactionStatus();
 
@@ -41,13 +47,113 @@ namespace SimpleBankATM.Business
             }
             else if (_transactionType == TransactionType.Deposit)
             {
+                transactionStatus = IsDepositMoreThanTenThousand((int)_transactionAmount);
+                if (!transactionStatus.IsValid)
+                {
+                    return transactionStatus;
+                }
+            }
+
+            //SaveTransaction
+            var result = SaveTransaction();
+            if (!result)
+            {
+                transactionStatus.IsValid = false;
+                transactionStatus.WarningMessage = "Error saving Transaction";
+                return transactionStatus;
+            }
+            return transactionStatus;
+        }
+
+        public TransactionStatus IsValidUpdateTransaction()
+        {
+            var transactionStatus = new TransactionStatus();
+
+            if (_transactionType == TransactionType.Withdrawl)
+            {
+                transactionStatus = IsWirthdrawlMoreThan90Percent((int)_transactionAmount);
+                if (!transactionStatus.IsValid)
+                {
+                    return transactionStatus;
+                }
                 transactionStatus = WillAccountBeLessThan100((int)_transactionAmount);
                 if (!transactionStatus.IsValid)
                 {
                     return transactionStatus;
                 }
             }
+            else if (_transactionType == TransactionType.Deposit)
+            {
+                transactionStatus = IsDepositMoreThanTenThousand((int)_transactionAmount);
+                if (!transactionStatus.IsValid)
+                {
+                    return transactionStatus;
+                }
+            }
+
+            //SaveTransaction
+            var result = SaveUpdateTransaction();
+            if (!result)
+            {
+                transactionStatus.IsValid = false;
+                transactionStatus.WarningMessage = "Error updatting Transaction";
+                return transactionStatus;
+            }
             return transactionStatus;
+        }
+
+        private bool SaveUpdateTransaction()
+        {
+            var originalTransaction = _transactionRepository.GetTransactionById(_transactionInformation.TransactionId);
+
+            if (_transactionType == TransactionType.Withdrawl)
+            {
+                _accountInformation.Balance += originalTransaction.TransactionAmount;
+                _accountInformation.Balance -= _transactionAmount;
+            }
+            else if (_transactionType == TransactionType.Deposit)
+            {
+                _accountInformation.Balance -= originalTransaction.TransactionAmount;
+                _accountInformation.Balance += _transactionAmount;
+            }
+         
+            try
+            {
+                _accountRepository.UpdateAccount(_accountInformation);
+                _transactionRepository.CreateTransaction(_transactionInformation);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool SaveTransaction()
+        {
+            if (_transactionType == TransactionType.Withdrawl)
+            {
+                _accountInformation.Balance -= _transactionAmount;
+            }
+            else if (_transactionType == TransactionType.Deposit)
+            {
+                _accountInformation.Balance += _transactionAmount;
+            }
+          
+            try
+            {
+                _accountRepository.UpdateAccount(_accountInformation);
+                _transactionRepository.CreateTransaction(_transactionInformation);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("ERROR SAVING TRANSACTION");
+                Console.WriteLine(" TRANSACTION TYPE: " + _transactionInformation.TransactionTypeId);
+                Console.WriteLine(e.ToString());
+
+                return false;
+            }
+            return true;
         }
 
         private TransactionStatus WillAccountBeLessThan100(int transactionAmount)

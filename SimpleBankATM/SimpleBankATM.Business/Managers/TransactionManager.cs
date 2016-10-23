@@ -1,46 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SimpleBankATM.Data.Repositories;
+﻿using SimpleBankATM.Data.Repositories;
 using SimpleBankATM.Models;
+using System.Collections.Generic;
 
 namespace SimpleBankATM.Business.Managers
 {
-   public class TransactionManager
+    public class TransactionManager : ITransactionManager
     {
-        private readonly ITransactionRepository _TransactionRepository;
+        private readonly ITransactionRepository _transactionRepository;
 
-        public TransactionManager(ITransactionRepository TransactionRepository)
+        private readonly ITransactionHandler _transactionHandler;
+
+        public TransactionManager(ITransactionRepository transactionRepository, ITransactionHandler transactionHandler)
         {
-            _TransactionRepository = TransactionRepository;
+            _transactionRepository = transactionRepository;
+            _transactionHandler = transactionHandler;
         }
 
-        public Transaction AddTransaction(Transaction Transaction)
+        public TransactionStatus AddTransaction(int transactionAmount, int accountId, TransactionType transactionType)
         {
-            return _TransactionRepository.CreateTransaction(Transaction);
+            var transaction = CreateTransaction(transactionAmount, accountId, transactionType);
+            return _transactionHandler.IsValidTransaction(transaction, transactionType);
         }
 
-        public Transaction GetTransactionByTransactionId(int TransactionId)
+        public Transaction GetTransactionByTransactionId(int transactionId)
         {
-            return _TransactionRepository.GetTransactionById(TransactionId);
+            return _transactionRepository.GetTransactionById(transactionId);
         }
 
         public IList<Transaction> GetAllTransactions()
         {
-            return _TransactionRepository.GetAllTransaction();
+            return _transactionRepository.GetAllTransaction();
         }
 
-        public bool DeleteTransaction(int TransactionId)
+        public bool DeleteTransaction(int transactionId)
         {
-            return _TransactionRepository.DeleteTransaction(TransactionId);
+            return _transactionRepository.DeleteTransaction(transactionId);
         }
 
-
-        public Transaction UpdateTransaction(Transaction Transaction)
+        public TransactionStatus UpdateTransaction(Transaction transaction, TransactionType transactionType)
         {
-            return _TransactionRepository.UpdateTransaction(Transaction);
+            return _transactionHandler.IsValidUpdateTransaction(transaction, transactionType);
+        }
+
+        private Transaction CreateTransaction(int transactionAmount, int accountId, TransactionType transactionType)
+        {
+            var newTransaction = new Transaction();
+            newTransaction.AccountId = accountId;
+            newTransaction.TransactionAmount = transactionAmount;
+            newTransaction.TransactionTypeId = (int) transactionType;
+            return newTransaction;
         }
     }
 }

@@ -87,6 +87,10 @@
     <Compile Include="Migrations\201610230931100_refactored dbo classes and finished repositories.Designer.cs">
       <DependentUpon>201610230931100_refactored dbo classes and finished repositories.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201610232057115_changed routing and account number to string.cs" />
+    <Compile Include="Migrations\201610232057115_changed routing and account number to string.Designer.cs">
+      <DependentUpon>201610232057115_changed routing and account number to string.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccountRepository.cs" />
@@ -126,6 +130,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201610230931100_refactored dbo classes and finished repositories.resx">
       <DependentUpon>201610230931100_refactored dbo classes and finished repositories.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610232057115_changed routing and account number to string.resx">
+      <DependentUpon>201610232057115_changed routing and account number to string.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

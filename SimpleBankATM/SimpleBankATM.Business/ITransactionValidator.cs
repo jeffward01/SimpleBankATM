@@ -1,9 +1,10 @@
-using SimpleBankATM.Models;
+﻿using SimpleBankATM.Models;
 
 namespace SimpleBankATM.Business
 {
     public interface ITransactionValidator
     {
-        TransactionStatus isValidTransaction();
+        TransactionStatus IsValidTransaction();
+        TransactionStatus IsValidUpdateTransaction();
     }
 }
