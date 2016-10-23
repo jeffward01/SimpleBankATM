@@ -8,105 +8,137 @@ namespace SimpleBankATM.Data.Repositories
 {
     public class AccountRepository : IAccountRepository
     {
-        private readonly IDataContext _dataContext = new DataContext();
 
         //GetAll
         public IList<Account> GetAllAccounts()
         {
-            return _dataContext.Accounts.Where(_ => _.Deleted == null).ToList();
+            using (var context = new DataContext())
+            {
+                return context.Accounts.Where(_ => _.Deleted == null).ToList();
+            }
         }
 
         //GetById
         public Account GetAccountById(int accountId)
         {
-            return _dataContext.Accounts.FirstOrDefault(_ => _.AccountId == accountId);
+            using (var context = new DataContext())
+            {
+                return context.Accounts.FirstOrDefault(_ => _.AccountId == accountId);
+
+            }
         }
 
         public Account GetAccountByAccountNumber(string accountNumber)
         {
-            return _dataContext.Accounts.FirstOrDefault(_ => _.AccountNumber == accountNumber);
+
+            using (var context = new DataContext())
+            {
+                return context.Accounts.FirstOrDefault(_ => _.AccountNumber == accountNumber);
+            }
         }
 
         public string GetAccountIdByAccountNumber(string accountNumber)
         {
-            return _dataContext.Accounts.FirstOrDefault(_ => _.AccountNumber == accountNumber).AccountNumber;
+            using (var context = new DataContext())
+            {
+                return context.Accounts.FirstOrDefault(_ => _.AccountNumber == accountNumber).AccountNumber;
+            }
         }
 
         public IList<Account> GetAllAccountsForCustomerId(int customerId)
         {
-            return _dataContext.Accounts.Where(_ => _.Deleted == null && _.CustomerId == customerId).ToList();
+            using (var context = new DataContext())
+            {
+                return context.Accounts.Where(_ => _.Deleted == null && _.CustomerId == customerId).ToList();
+            }
         }
 
         public bool DoesAccountNumberExist(string accountNumber)
         {
-            var account = _dataContext.Accounts.FirstOrDefault(_ => _.AccountNumber == accountNumber);
-            if (account == null)
+            using (var context = new DataContext())
             {
-                return true;
-            }
-            else
-            {
-                return false;
+
+                var account = context.Accounts.FirstOrDefault(_ => _.AccountNumber == accountNumber);
+                if (account == null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
 
         //Create
         public Account CreateAccount(Account account)
         {
-            _dataContext.Accounts.Add(account);
-            _dataContext.SaveChanges();
-            return account;
+            using (var context = new DataContext())
+            {
+                context.Accounts.Add(account);
+                context.SaveChanges();
+                return account;
+            }
         }
 
         //Update
         public Account UpdateAccount(Account account)
         {
-            _dataContext.SetModified(account);
-            _dataContext.SaveChanges();
-            return _dataContext.Accounts.FirstOrDefault(_ => _.AccountId == account.AccountId);
+            using (var context = new DataContext())
+            {
+                context.SetModified(account);
+                context.SaveChanges();
+                return context.Accounts.FirstOrDefault(_ => _.AccountId == account.AccountId);
+            }
         }
 
         //Delete
         public bool DeleteAccount(int accountId)
         {
-            var account = _dataContext.Accounts.FirstOrDefault(_ => _.AccountId == accountId);
-            if (account == null)
+            using (var context = new DataContext())
             {
-                return false;
-            }
-            try
-            {
-                account.Deleted = DateTime.Now;
-                _dataContext.SetModified(account);
+                var account = context.Accounts.FirstOrDefault(_ => _.AccountId == accountId);
+                if (account == null)
+                {
+                    return false;
+                }
+                try
+                {
+                    account.Deleted = DateTime.Now;
+                    context.SetModified(account);
 
-                _dataContext.SaveChanges();
+                    context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+                return true;
             }
-            catch (Exception)
-            {
-                return false;
-            }
-            return true;
         }
 
         public bool DeleteAccountByAccountNumber(string accountNumber)
         {
-            var account = _dataContext.Accounts.FirstOrDefault(_ => _.AccountNumber == accountNumber);
-            if (account == null)
+            using (var context = new DataContext())
             {
-                return false;
-            }
-            try
-            {
-                account.Deleted = DateTime.Now;
-                _dataContext.SetModified(account);
+                var account = context.Accounts.FirstOrDefault(_ => _.AccountNumber == accountNumber);
+                if (account == null)
+                {
+                    return false;
+                }
+                try
+                {
+                    account.Deleted = DateTime.Now;
+                    context.SetModified(account);
 
-                _dataContext.SaveChanges();
+                    context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+                return true;
             }
-            catch (Exception)
-            {
-                return false;
-            }
-            return true;
         }
     }
 }

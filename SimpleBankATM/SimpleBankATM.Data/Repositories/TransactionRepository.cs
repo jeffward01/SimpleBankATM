@@ -8,59 +8,76 @@ namespace SimpleBankATM.Data.Repositories
 {
     public class TransactionRepository : ITransactionRepository
     {
-        private readonly IDataContext _dataContext = new DataContext();
 
         public IList<Transaction> GetAllTransaction()
         {
-            return _dataContext.Transactions.Where(_ => _.Deleted == null).ToList();
+            using (var context = new DataContext())
+            {
+                return context.Transactions.Where(_ => _.Deleted == null).ToList();
+            }
         }
 
         public Transaction GetTransactionById(int transactionId)
         {
-            return _dataContext.Transactions.FirstOrDefault(_ => _.TransactionId == transactionId);
+            using (var context = new DataContext())
+            {
+                return context.Transactions.FirstOrDefault(_ => _.TransactionId == transactionId);
+            }
         }
 
         public IList<Transaction> GetAllTransactionsForAccountId(int accountId)
         {
-            return _dataContext.Transactions.Where(_ => _.Deleted == null && _.AccountId == accountId).ToList();
+            using (var context = new DataContext())
+            {
+                return context.Transactions.Where(_ => _.Deleted == null && _.AccountId == accountId).ToList();
+            }
         }
 
         //Create
         public Transaction CreateTransaction(Transaction transaction)
         {
-            _dataContext.Transactions.Add(transaction);
-            _dataContext.SaveChanges();
-            return transaction;
+            using (var context = new DataContext())
+            {
+                context.Transactions.Add(transaction);
+                context.SaveChanges();
+                return transaction;
+            }
         }
 
         //Update
         public Transaction UpdateTransaction(Transaction transaction)
         {
-            _dataContext.SetModified(transaction);
-            _dataContext.SaveChanges();
-            return _dataContext.Transactions.FirstOrDefault(_ => _.TransactionId == transaction.TransactionId);
+            using (var context = new DataContext())
+            {
+                context.SetModified(transaction);
+                context.SaveChanges();
+                return context.Transactions.FirstOrDefault(_ => _.TransactionId == transaction.TransactionId);
+            }
         }
 
         //Delete
         public bool DeleteTransaction(int transactionId)
         {
-            var transaction = _dataContext.Transactions.FirstOrDefault(_ => _.TransactionId == transactionId);
-            if (transaction == null)
+            using (var context = new DataContext())
             {
-                return false;
-            }
-            try
-            {
-                transaction.Deleted = DateTime.Now;
-                _dataContext.SetModified(transaction);
+                var transaction = context.Transactions.FirstOrDefault(_ => _.TransactionId == transactionId);
+                if (transaction == null)
+                {
+                    return false;
+                }
+                try
+                {
+                    transaction.Deleted = DateTime.Now;
+                    context.SetModified(transaction);
 
-                _dataContext.SaveChanges();
+                    context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+                return true;
             }
-            catch (Exception)
-            {
-                return false;
-            }
-            return true;
         }
     }
 }

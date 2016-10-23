@@ -22,7 +22,8 @@ namespace SimpleBankATM.Business.Managers
 
         public Account GetAccountByAccountId(int AccountId)
         {
-            return _AccountRepository.GetAccountById(AccountId);
+            var account =  _AccountRepository.GetAccountById(AccountId);
+            return account;
         }
 
         public IList<Account> GetAllAccountsForCustomerId(int customerId)

@@ -20,7 +20,7 @@ namespace SimpleBankATM.Models
 
         public string RoutingNumber { get; set; }
 
-        public decimal Balance { get; set; }
+        public int Balance { get; set; }
 
         public int TransactionCount { get; set; }
 

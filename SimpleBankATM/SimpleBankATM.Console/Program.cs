@@ -30,7 +30,7 @@ namespace SimpleBankATM.Console
             BankLogManager.LogErrors((Exception)e.ExceptionObject);
             System.Console.WriteLine();
             System.Console.WriteLine(e.ExceptionObject.ToString());
-            System.Console.WriteLine("Press Enter to continue");
+            System.Console.WriteLine("Press Enter to exit");
             System.Console.ReadLine();
             Environment.Exit(1);
         }

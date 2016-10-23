@@ -13,7 +13,7 @@ namespace SimpleBankATM.Models
 
         public int TransactionTypeId { get; set; }
 
-        public decimal TransactionAmount { get; set; }
+        public int TransactionAmount { get; set; }
 
         public virtual LU_TransactionType TransactionType { get; set; }
     }

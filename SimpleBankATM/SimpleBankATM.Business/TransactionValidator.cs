@@ -10,7 +10,7 @@ namespace SimpleBankATM.Business
 
         private readonly ITransactionRepository _transactionRepository;
 
-        private readonly decimal _transactionAmount;
+        private readonly int _transactionAmount;
 
         private readonly Account _accountInformation;
 

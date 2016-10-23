@@ -8,7 +8,6 @@ namespace SimpleBankATM.Data.Repositories
 {
     public class CustomerRepository : ICustomerRepository
     {
-        private readonly IDataContext _dataContext = new DataContext();
 
         //Get all users
         //Get user by id
@@ -18,70 +17,89 @@ namespace SimpleBankATM.Data.Repositories
 
         public IList<Customer> GetAllUsers()
         {
-            return _dataContext.Users.Where(_ => _.Deleted == null).ToList();
+            using (var context = new DataContext())
+            {
+                return context.Users.Where(_ => _.Deleted == null).ToList();
+            }
         }
 
         public Customer GetUserById(int userId)
         {
-            return _dataContext.Users.FirstOrDefault(_ => _.UserId == userId);
+            using (var context = new DataContext())
+            {
+                return context.Users.FirstOrDefault(_ => _.UserId == userId);
+            }
         }
 
         public Customer CreateUser(Customer user)
         {
-            user.CreatedDate = DateTime.Now;
-            _dataContext.Users.Add(user);
-            try
+            using (var context = new DataContext())
             {
-                _dataContext.SaveChanges();
+                user.CreatedDate = DateTime.Now;
+                context.Users.Add(user);
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+                return user;
             }
-            catch (Exception)
-            {
-                throw;
-            }
-            return user;
         }
 
         public Customer UpdateUser(Customer user)
         {
-            _dataContext.SetModified(user);
-            _dataContext.SaveChanges();
-            return _dataContext.Users.FirstOrDefault(_ => _.UserId == user.UserId);
+            using (var context = new DataContext())
+            {
+                context.SetModified(user);
+                context.SaveChanges();
+                return context.Users.FirstOrDefault(_ => _.UserId == user.UserId);
+            }
+      
         }
 
         public bool DeleteUser(Customer user)
         {
-            user.Deleted = DateTime.Now;
-            _dataContext.SetModified(user);
-            try
+            using (var context = new DataContext())
             {
-                _dataContext.SaveChanges();
+                user.Deleted = DateTime.Now;
+                context.SetModified(user);
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+                return true;
             }
-            catch (Exception)
-            {
-                return false;
-            }
-            return true;
         }
 
         public bool DeleteUser(int userId)
         {
-            var user = _dataContext.Users.FirstOrDefault(_ => _.UserId == userId);
-            if (user == null)
+            using (var context = new DataContext())
             {
-                return false;
-            }
-            try
-            {
-                user.Deleted = DateTime.Now;
-                _dataContext.SetModified(user);
+                var user = context.Users.FirstOrDefault(_ => _.UserId == userId);
+                if (user == null)
+                {
+                    return false;
+                }
+                try
+                {
+                    user.Deleted = DateTime.Now;
+                    context.SetModified(user);
 
-                _dataContext.SaveChanges();
+                    context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+                return true;
             }
-            catch (Exception)
-            {
-                return false;
-            }
-            return true;
         }
     }
 }
