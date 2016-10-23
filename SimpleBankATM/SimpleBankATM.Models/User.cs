@@ -24,6 +24,8 @@ namespace SimpleBankATM.Models
 
         public string FullName => FirstName + " " + LastName;
 
+        public string EmailAddress { get; set; }
+
         public int SocialSecurityNumber { get; set; }
 
         public decimal TotalBalence { get; set; }

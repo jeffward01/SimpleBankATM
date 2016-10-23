@@ -2,7 +2,9 @@
 using NLog;
 using SimpleBankATM.Models;
 using System;
+using System.ComponentModel;
 using System.Data.Entity;
+using SimpleBankATM.Data.Infrastructure;
 
 namespace SimpleBankATM.Data
 {
@@ -10,7 +12,7 @@ namespace SimpleBankATM.Data
     using TransactionDataConfig = System.Data.Entity.ModelConfiguration.EntityTypeConfiguration<Transaction>;
     using UserDatConfig = System.Data.Entity.ModelConfiguration.EntityTypeConfiguration<User>;
 
-    public class DataContext : IdentityDbContext<IdentityUser>
+    public class DataContext : IdentityDbContext<IdentityUser>, IDataContext
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
