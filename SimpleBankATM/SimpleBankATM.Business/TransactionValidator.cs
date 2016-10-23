@@ -10,20 +10,16 @@ namespace SimpleBankATM.Business
 
         private readonly decimal _transactionAmount;
 
-        private readonly int _accountId;
-
         private readonly Account _accountInformation;
 
         private readonly TransactionType _transactionType;
 
-        public TransactionValidator(int amount, int accountId, TransactionType transactionType)
+        public TransactionValidator(int transactionAmount, int accountId, TransactionType transactionType)
         {
             _accountRepository = new AccountRepository();
-            _transactionAmount = amount;
-            _accountId = accountId;
+            _transactionAmount = transactionAmount;
             _accountInformation = _accountRepository.GetAccountById(accountId);
             _transactionType = transactionType;
-
         }
 
         public TransactionStatus isValidTransaction()
@@ -43,7 +39,7 @@ namespace SimpleBankATM.Business
                     return transactionStatus;
                 }
             }
-            else
+            else if (_transactionType == TransactionType.Deposit)
             {
                 transactionStatus = WillAccountBeLessThan100((int)_transactionAmount);
                 if (!transactionStatus.IsValid)
@@ -54,43 +50,52 @@ namespace SimpleBankATM.Business
             return transactionStatus;
         }
 
-        private TransactionStatus WillAccountBeLessThan100(int count)
+        private TransactionStatus WillAccountBeLessThan100(int transactionAmount)
         {
             var transactionStatus = new TransactionStatus();
-            var afterTransaction = _accountInformation.Balance - count;
+            var afterTransaction = _accountInformation.Balance - transactionAmount;
             if (afterTransaction < 100)
             {
                 transactionStatus.IsValid = false;
                 transactionStatus.WarningMessage = "Account balence will fall below $100. Error.";
+                return transactionStatus;
             }
             transactionStatus.IsValid = true;
+            transactionStatus.WarningMessage = "Success";
+
             return transactionStatus;
         }
 
-        private TransactionStatus IsWirthdrawlMoreThan90Percent(int count)
+        private TransactionStatus IsWirthdrawlMoreThan90Percent(int transactionAmount)
         {
             var percent90OfBalence = Double.Parse(_accountInformation.Balance.ToString()) * .9;
             var transactionStatus = new TransactionStatus();
 
-            if (count > percent90OfBalence)
+            if (transactionAmount > percent90OfBalence)
             {
                 transactionStatus.IsValid = false;
                 transactionStatus.WarningMessage = "User cannot withdraw more than 90% of account balance. Error";
+                return transactionStatus;
             }
             transactionStatus.IsValid = true;
+            transactionStatus.WarningMessage = "Success";
+
             return transactionStatus;
         }
 
-        private TransactionStatus IsDepositMoreThanTenThousand(int count)
+        private TransactionStatus IsDepositMoreThanTenThousand(int transactionAmount)
         {
             var transactionStatus = new TransactionStatus();
 
-            if (count > 10000)
+            if (transactionAmount > 10000)
             {
                 transactionStatus.IsValid = false;
                 transactionStatus.WarningMessage = "User cannot deposit more than $10,000 at a time. Error";
+                return transactionStatus;
             }
             transactionStatus.IsValid = true;
+            transactionStatus.WarningMessage = "Success";
+
             return transactionStatus;
         }
     }
