@@ -14,9 +14,9 @@ namespace SimpleBankATM.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AccountId { get; set; }
 
-        public int UserId { get; set; }
+        public int CustomerId { get; set; }
 
-        public int AccountNumber { get; set; }
+        public string AccountNumber { get; set; }
 
         public int RoutingNumber { get; set; }
 

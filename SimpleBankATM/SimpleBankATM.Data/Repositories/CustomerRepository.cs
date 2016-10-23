@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SimpleBankATM.Data.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class CustomerRepository : ICustomerRepository
     {
         private readonly IDataContext _dataContext = new DataContext();
 
@@ -16,37 +16,65 @@ namespace SimpleBankATM.Data.Repositories
         //Edit user
         //Delete user
 
-        public IList<User> GetAllUsers()
+        public IList<Customer> GetAllUsers()
         {
             return _dataContext.Users.Where(_ => _.Deleted == null).ToList();
         }
 
-        public User GetUserById(int userId)
+        public Customer GetUserById(int userId)
         {
             return _dataContext.Users.FirstOrDefault(_ => _.UserId == userId);
         }
 
-        public User CreateUser(User user)
+        public Customer CreateUser(Customer user)
         {
             user.CreatedDate = DateTime.Now;
             _dataContext.Users.Add(user);
-            _dataContext.SaveChanges();
+            try
+            {
+                _dataContext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
             return user;
         }
 
-        public User UpdateUser(User user)
+        public Customer UpdateUser(Customer user)
         {
             _dataContext.SetModified(user);
             _dataContext.SaveChanges();
-            return user;
+            return _dataContext.Users.FirstOrDefault(_ => _.UserId == user.UserId);
         }
 
-        public bool DeleteUser(User user)
+        public bool DeleteUser(Customer user)
         {
             user.Deleted = DateTime.Now;
             _dataContext.SetModified(user);
             try
             {
+                _dataContext.SaveChanges();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool DeleteUser(int userId)
+        {
+            var user = _dataContext.Users.FirstOrDefault(_ => _.UserId == userId);
+            if (user == null)
+            {
+                return false;
+            }
+            try
+            {
+                user.Deleted = DateTime.Now;
+            _dataContext.SetModified(user);
+           
                 _dataContext.SaveChanges();
             }
             catch (Exception)

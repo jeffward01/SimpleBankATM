@@ -10,7 +10,7 @@ namespace SimpleBankATM.Data.Infrastructure
 {
     using AccountDataConfig = System.Data.Entity.ModelConfiguration.EntityTypeConfiguration<Account>;
     using TransactionDataConfig = System.Data.Entity.ModelConfiguration.EntityTypeConfiguration<Transaction>;
-    using UserDatConfig = System.Data.Entity.ModelConfiguration.EntityTypeConfiguration<User>;
+    using UserDatConfig = System.Data.Entity.ModelConfiguration.EntityTypeConfiguration<Customer>;
 
     public class DataContext : IdentityDbContext<IdentityUser>, IDataContext
     {
@@ -24,11 +24,11 @@ namespace SimpleBankATM.Data.Infrastructure
             catch (Exception e)
             {
                 Logger.Debug("_____CRTIICAL ERROR_____________");
-                Logger.Debug("An Error occured trying to connect to the dayabase " + e.ToString());
+                Logger.Debug("An Error occured trying to connect to the database " + e.ToString());
             }
         }
 
-        public IDbSet<User> Users { get; set; }
+        public IDbSet<Customer> Users { get; set; }
         public IDbSet<Account> Accounts { get; set; }
         public IDbSet<Transaction> Transactions { get; set; }
 
@@ -41,9 +41,9 @@ namespace SimpleBankATM.Data.Infrastructure
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //UserProfile
-            UserDatConfig user = modelBuilder.Entity<User>();
+            UserDatConfig user = modelBuilder.Entity<Customer>();
             user.HasKey(a => a.UserId);
-            user.HasMany(u => u.Accounts).WithRequired().HasForeignKey(rc => rc.UserId);
+            user.HasMany(u => u.Accounts).WithRequired().HasForeignKey(rc => rc.CustomerId);
             user.Ignore(_ => _.FullName);
             user.Ignore(_ => _.NoOfAccounts);
             user.Ignore(_ => _.TotalBalence);
@@ -55,6 +55,8 @@ namespace SimpleBankATM.Data.Infrastructure
             TransactionDataConfig tdc = modelBuilder.Entity<Transaction>();
             tdc.HasKey(_ => _.TransactionId);
             tdc.HasRequired(_ => _.TransactionType).WithMany().HasForeignKey(x => x.TransactionTypeId).WillCascadeOnDelete(false);
+
+
 
             base.OnModelCreating(modelBuilder);
         }

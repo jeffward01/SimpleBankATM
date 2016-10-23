@@ -6,7 +6,7 @@ namespace SimpleBankATM.Data.Infrastructure
 {
     public interface IDataContext : IDisposable
     {
-        IDbSet<User> Users { get; set; }
+        IDbSet<Customer> Users { get; set; }
         IDbSet<Transaction> Transactions { get; set; }
         IDbSet<Account> Accounts { get; set; }
 

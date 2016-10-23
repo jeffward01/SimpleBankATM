@@ -19,8 +19,6 @@ namespace SimpleBankATM.Console.Configuration
             //This registers 'A'
             builder.RegisterAssemblyModules(typeof(ContainerConfig).Assembly);
 
-            var container = builder.Build();
-
         //    GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
             return builder.Build();

@@ -16,18 +16,20 @@ namespace SimpleBankATM.Console.Configuration
         protected override void Load(ContainerBuilder builder)
         {
 
-
             //DataContext
             builder.RegisterType<DataContext>().As<IDataContext>().InstancePerLifetimeScope();
 
+
+            //Applicaion 
+            builder.RegisterType<Application>().As<IApplication>();
 
             //Services
 
 
 
             //Repositories
-            builder.RegisterType<UserRepository>().As<IUserRepository>();
-
+            builder.RegisterType<CustomerRepository>().As<ICustomerRepository>();
+            builder.RegisterType<AuthRepository>().As<IAuthRepository>();
 
 
 

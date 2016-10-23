@@ -68,8 +68,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Application.cs" />
     <Compile Include="Configuration\ContainerConfig.cs" />
     <Compile Include="Configuration\RegisterServices.cs" />
+    <Compile Include="IApplication.cs" />
+    <Compile Include="Logging\BankLogManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -84,6 +87,10 @@
     <ProjectReference Include="..\SimpleBankATM.Data\SimpleBankATM.Data.csproj">
       <Project>{C6B6F09A-8E13-4DC4-A764-9A1A41AF82F4}</Project>
       <Name>SimpleBankATM.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SimpleBankATM.Models\SimpleBankATM.Models.csproj">
+      <Project>{434C6176-C7E4-41D7-930B-63AE25654938}</Project>
+      <Name>SimpleBankATM.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,3 +1,5 @@
+using SimpleBankATM.Data.Infrastructure;
+
 namespace SimpleBankATM.Data.Migrations
 {
     using System;
@@ -5,14 +7,14 @@ namespace SimpleBankATM.Data.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<SimpleBankATM.Data.DataContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<DataContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(SimpleBankATM.Data.DataContext context)
+        protected override void Seed(DataContext context)
         {
             //  This method will be called after migrating to the latest version.
 
