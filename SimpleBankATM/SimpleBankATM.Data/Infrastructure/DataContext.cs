@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Data.Entity;
 using SimpleBankATM.Data.Infrastructure;
 
-namespace SimpleBankATM.Data
+namespace SimpleBankATM.Data.Infrastructure
 {
     using AccountDataConfig = System.Data.Entity.ModelConfiguration.EntityTypeConfiguration<Account>;
     using TransactionDataConfig = System.Data.Entity.ModelConfiguration.EntityTypeConfiguration<Transaction>;
@@ -32,6 +32,10 @@ namespace SimpleBankATM.Data
         public IDbSet<Account> Accounts { get; set; }
         public IDbSet<Transaction> Transactions { get; set; }
 
+        public void SetModified(object entity)
+        {
+            Entry(entity).State = EntityState.Modified;
+        }
         //Code First
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
