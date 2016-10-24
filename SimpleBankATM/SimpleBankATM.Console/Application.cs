@@ -23,25 +23,26 @@ namespace SimpleBankATM.Console
 
         public void Run()
         {
-            var newUser = new Customer();
-            newUser.FirstName = "Joe";
-            _userRepository.CreateUser(newUser);
-            var createdUser = _userRepository.GetAllUsers();
-            foreach (var user in createdUser)
-            {
-                System.Console.WriteLine(user.FirstName);
-            }
-            var newChanged = _userRepository.GetUserById(5);
-            System.Console.WriteLine(newChanged.FirstName);
-            newChanged.FirstName = "Wilbur";
-            _userRepository.UpdateUser(newChanged);
-            var verify = _userRepository.GetUserById(5);
-            System.Console.WriteLine("Should say Wilbur:  " + verify.FirstName);
+         //   var newUser = new Customer();
+         //   newUser.FirstName = "Joe";
+         ////   _userRepository.CreateUser(newUser);
+         //   var createdUser = _userRepository.GetAllUsers();
+         //   foreach (var user in createdUser)
+         //   {
+         //       System.Console.WriteLine(user.FirstName);
+         //   }
+         //   var newChanged = _userRepository.GetUserById(1);
+         //   System.Console.WriteLine(newChanged.FirstName);
+         //   newChanged.FirstName = "Wilbur";
+         //   _userRepository.UpdateUser(newChanged);
+         //   var verify = _userRepository.GetUserById(1);
+         //   System.Console.WriteLine("Should say Wilbur:  " + verify.FirstName);
 
             //Add account to Wilbur
-          //  _accountManager.AddAccount(5);
-            var accounts = _accountManager.GetAllAccountsForCustomerId(5);
-            var newAccount = accounts.FirstOrDefault(_ => _.AccountId == 1);
+            //
+         //   _accountManager.AddAccount(1, AccountType.Checking);
+            var accounts = _accountManager.GetAllAccountsForCustomerId(1);
+            var newAccount = accounts.FirstOrDefault(_ => _.AccountId == 2);
             System.Console.WriteLine("newAccount :  " + newAccount.AccountNumber + "   Routing: " + newAccount.RoutingNumber + " Original  Balanace: " + newAccount.Balance);
 
             //add transaction to new Account
@@ -50,7 +51,7 @@ namespace SimpleBankATM.Console
             var reuslt = _transactionManager.AddTransaction(100, newAccount.AccountId, TransactionType.Deposit);
             System.Console.WriteLine("Transaction INformation :  IsValid:  " + reuslt.IsValid + "   Message: " + reuslt.WarningMessage);
 
-            var updatedAccount = _accountManager.GetAccountByAccountId(1);
+            var updatedAccount = _accountManager.GetAccountByAccountId(2);
             System.Console.WriteLine("newAccount :  " + updatedAccount.AccountNumber + "   Routing: " + updatedAccount.RoutingNumber + "  Balanace: should match above " + updatedAccount.Balance);
 
             ////add transaction withdrwal

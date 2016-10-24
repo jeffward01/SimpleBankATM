@@ -5,7 +5,7 @@ namespace SimpleBankATM.Business.Managers
 {
     public interface IAccountManager
     {
-        Account AddAccount(int customerId);
+        Account AddAccount(int customerId, AccountType accountType);
 
         Account GetAccountByAccountId(int AccountId);
 

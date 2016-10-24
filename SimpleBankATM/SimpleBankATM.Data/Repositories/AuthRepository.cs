@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using SimpleBankATM.Data.Infrastructure;
-using SimpleBankATM.Models;
-using System.Threading.Tasks;
-
-namespace SimpleBankATM.Data.Repositories
+﻿namespace SimpleBankATM.Data.Repositories
 {
     public class AuthRepository : IAuthRepository
     {
@@ -14,9 +8,9 @@ namespace SimpleBankATM.Data.Repositories
         //public AuthRepository()
         //{
         //    _propertyButlerContext = new DataContext();
-        //    _userManager = new UserManager<IdentityUser>(new UserStore<IdentityUser>(_propertyButlerContext));
         //}
-
+        //USE USING STATEMENTS HERE UNTIL AUTOFAC dbContext is refactored.  Error earlier when autofac managed dbContext,
+        //Context was not being disposed and was delivering old data not in sync w/ db
         //public async Task<IdentityResult> RegisterUser(UserModel userModel)
         //{
         //    IdentityUser user = new IdentityUser();

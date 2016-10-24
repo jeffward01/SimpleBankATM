@@ -5,12 +5,15 @@ using System;
 using System.ComponentModel;
 using System.Data.Entity;
 using SimpleBankATM.Data.Infrastructure;
+using SimpleBankATM.Models.LookupModels;
 
 namespace SimpleBankATM.Data.Infrastructure
 {
     using AccountDataConfig = System.Data.Entity.ModelConfiguration.EntityTypeConfiguration<Account>;
     using TransactionDataConfig = System.Data.Entity.ModelConfiguration.EntityTypeConfiguration<Transaction>;
     using UserDatConfig = System.Data.Entity.ModelConfiguration.EntityTypeConfiguration<Customer>;
+    using LU_AccountTypeonfig = System.Data.Entity.ModelConfiguration.EntityTypeConfiguration<LU_AccountType>;
+
 
     public class DataContext : IdentityDbContext<IdentityUser>, IDataContext
     {
@@ -42,21 +45,23 @@ namespace SimpleBankATM.Data.Infrastructure
         {
             //UserProfile
             UserDatConfig user = modelBuilder.Entity<Customer>();
-            user.HasKey(a => a.UserId);
+            user.HasKey(a => a.CustomerId);
             user.HasMany(u => u.Accounts).WithRequired().HasForeignKey(rc => rc.CustomerId);
             user.Ignore(_ => _.FullName);
-            user.Ignore(_ => _.NoOfAccounts);
-            user.Ignore(_ => _.TotalBalence);
+         
 
             AccountDataConfig adc = modelBuilder.Entity<Account>();
             adc.HasKey(_ => _.AccountId);
             adc.HasMany(_ => _.Transactions).WithRequired().HasForeignKey(x => x.AccountId);
+            adc.HasRequired(_ => _.AccountType).WithMany().HasForeignKey(x => x.AccountTypeId).WillCascadeOnDelete(false);
+
 
             TransactionDataConfig tdc = modelBuilder.Entity<Transaction>();
             tdc.HasKey(_ => _.TransactionId);
             tdc.HasRequired(_ => _.TransactionType).WithMany().HasForeignKey(x => x.TransactionTypeId).WillCascadeOnDelete(false);
 
-
+            LU_AccountTypeonfig at = modelBuilder.Entity<LU_AccountType>();
+            at.HasKey(_ => _.AccountTypeId);
 
             base.OnModelCreating(modelBuilder);
         }

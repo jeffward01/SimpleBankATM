@@ -27,7 +27,7 @@ namespace SimpleBankATM.Data.Repositories
         {
             using (var context = new DataContext())
             {
-                return context.Users.FirstOrDefault(_ => _.UserId == userId);
+                return context.Users.FirstOrDefault(_ => _.CustomerId == userId);
             }
         }
 
@@ -49,13 +49,32 @@ namespace SimpleBankATM.Data.Repositories
             }
         }
 
+        public int GetNumberOfAccounts(int customerId)
+        {
+            using (var contecxt = new DataContext())
+            {
+                return contecxt.Accounts.Count(_ => _.CustomerId == customerId && _.Deleted == null);
+            }
+        }
+
+        public int GetSumOfAccounts(int customerId)
+        {
+            using (var contecxt = new DataContext())
+            {
+
+                var accounts= contecxt.Accounts.Where(_ => _.CustomerId == customerId && _.Deleted == null).ToList();
+                return accounts.Sum(_ => _.Balance);
+            }
+        }
+
+
         public Customer UpdateUser(Customer user)
         {
             using (var context = new DataContext())
             {
                 context.SetModified(user);
                 context.SaveChanges();
-                return context.Users.FirstOrDefault(_ => _.UserId == user.UserId);
+                return context.Users.FirstOrDefault(_ => _.CustomerId == user.CustomerId);
             }
       
         }
@@ -82,7 +101,7 @@ namespace SimpleBankATM.Data.Repositories
         {
             using (var context = new DataContext())
             {
-                var user = context.Users.FirstOrDefault(_ => _.UserId == userId);
+                var user = context.Users.FirstOrDefault(_ => _.CustomerId == userId);
                 if (user == null)
                 {
                     return false;

@@ -14,9 +14,9 @@ namespace SimpleBankATM.Business.Managers
             _AccountRepository = AccountRepository;
         }
 
-        public Account AddAccount(int customerId)
+        public Account AddAccount(int customerId, AccountType accountType)
         {
-            var newAccount = GenerateAccountInformation(customerId);
+            var newAccount = GenerateAccountInformation(customerId, accountType);
             return _AccountRepository.CreateAccount(newAccount);
         }
 
@@ -56,9 +56,10 @@ namespace SimpleBankATM.Business.Managers
             return _AccountRepository.UpdateAccount(Account);
         }
 
-        private Account GenerateAccountInformation(int customerId)
+        private Account GenerateAccountInformation(int customerId, AccountType accountType)
         {
             var newAccount = new Account();
+            newAccount.AccountTypeId = (int) accountType;
             newAccount.CustomerId = customerId;
             newAccount.RoutingNumber = LocalBankInformation.RoutingNumber;
             newAccount.AccountNumber = GenerateAccountNumber();
@@ -68,10 +69,10 @@ namespace SimpleBankATM.Business.Managers
         private string GenerateAccountNumber()
         {
             var accountNumber = GenerateNumber();
-           // while (_AccountRepository.DoesAccountNumberExist(accountNumber))
-          //  {
-          //      accountNumber = GenerateNumber();
-          //  }
+          if (_AccountRepository.DoesAccountNumberExist(accountNumber))
+          {
+             GenerateNumber();
+          }
             return accountNumber;
         }
 

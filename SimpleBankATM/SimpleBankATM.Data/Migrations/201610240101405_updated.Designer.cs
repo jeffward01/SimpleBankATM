@@ -7,13 +7,13 @@ namespace SimpleBankATM.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class Addedemailaddresstouser : IMigrationMetadata
+    public sealed partial class updated : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Addedemailaddresstouser));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(updated));
         
         string IMigrationMetadata.Id
         {
-            get { return "201610230326362_Added emailaddress to user"; }
+            get { return "201610240101405_updated"; }
         }
         
         string IMigrationMetadata.Source

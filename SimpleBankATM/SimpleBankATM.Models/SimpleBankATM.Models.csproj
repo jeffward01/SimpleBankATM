@@ -45,6 +45,7 @@
     <Compile Include="Account.cs" />
     <Compile Include="BaseEntity.cs" />
     <Compile Include="Enum.cs" />
+    <Compile Include="LookupModels\LU_AccountType.cs" />
     <Compile Include="LookupModels\LU_TransactionType.cs" />
     <Compile Include="Transaction.cs" />
     <Compile Include="Customer.cs" />

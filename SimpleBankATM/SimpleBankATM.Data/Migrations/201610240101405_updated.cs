@@ -3,7 +3,7 @@ namespace SimpleBankATM.Data.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Intiial : DbMigration
+    public partial class updated : DbMigration
     {
         public override void Up()
         {
@@ -12,18 +12,30 @@ namespace SimpleBankATM.Data.Migrations
                 c => new
                     {
                         AccountId = c.Int(nullable: false, identity: true),
-                        UserId = c.Int(nullable: false),
-                        AccountNumber = c.Int(nullable: false),
-                        RoutingNumber = c.Int(nullable: false),
-                        Balance = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        CustomerId = c.Int(nullable: false),
+                        AccountNumber = c.String(),
+                        RoutingNumber = c.String(),
+                        AccountTypeId = c.Int(nullable: false),
+                        Balance = c.Int(nullable: false),
                         TransactionCount = c.Int(nullable: false),
                         CreatedDate = c.DateTime(),
                         LastModifiedDate = c.DateTime(),
                         Deleted = c.DateTime(),
                     })
                 .PrimaryKey(t => t.AccountId)
-                .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
-                .Index(t => t.UserId);
+                .ForeignKey("dbo.LU_AccountType", t => t.AccountTypeId)
+                .ForeignKey("dbo.Customers", t => t.CustomerId, cascadeDelete: true)
+                .Index(t => t.CustomerId)
+                .Index(t => t.AccountTypeId);
+            
+            CreateTable(
+                "dbo.LU_AccountType",
+                c => new
+                    {
+                        AccountTypeId = c.Int(nullable: false, identity: true),
+                        AccountType = c.String(),
+                    })
+                .PrimaryKey(t => t.AccountTypeId);
             
             CreateTable(
                 "dbo.Transactions",
@@ -32,7 +44,7 @@ namespace SimpleBankATM.Data.Migrations
                         TransactionId = c.Int(nullable: false, identity: true),
                         AccountId = c.Int(nullable: false),
                         TransactionTypeId = c.Int(nullable: false),
-                        TransactionAmount = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        TransactionAmount = c.Int(nullable: false),
                         CreatedDate = c.DateTime(),
                         LastModifiedDate = c.DateTime(),
                         Deleted = c.DateTime(),
@@ -76,21 +88,21 @@ namespace SimpleBankATM.Data.Migrations
                 .Index(t => t.RoleId);
             
             CreateTable(
-                "dbo.Users",
+                "dbo.Customers",
                 c => new
                     {
-                        UserId = c.Int(nullable: false, identity: true),
-                        UserName = c.String(),
-                        Password = c.String(),
+                        CustomerId = c.Int(nullable: false, identity: true),
                         FirstName = c.String(),
                         LastName = c.String(),
+                        EmailAddress = c.String(),
+                        Password = c.String(),
                         SocialSecurityNumber = c.Int(nullable: false),
-                        DateOfBirth = c.DateTime(nullable: false),
+                        DateOfBirth = c.DateTime(),
                         CreatedDate = c.DateTime(),
                         LastModifiedDate = c.DateTime(),
                         Deleted = c.DateTime(),
                     })
-                .PrimaryKey(t => t.UserId);
+                .PrimaryKey(t => t.CustomerId);
             
             CreateTable(
                 "dbo.AspNetUsers",
@@ -144,10 +156,11 @@ namespace SimpleBankATM.Data.Migrations
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
-            DropForeignKey("dbo.Accounts", "UserId", "dbo.Users");
+            DropForeignKey("dbo.Accounts", "CustomerId", "dbo.Customers");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
             DropForeignKey("dbo.Transactions", "AccountId", "dbo.Accounts");
             DropForeignKey("dbo.Transactions", "TransactionTypeId", "dbo.LU_TransactionType");
+            DropForeignKey("dbo.Accounts", "AccountTypeId", "dbo.LU_AccountType");
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
@@ -156,15 +169,17 @@ namespace SimpleBankATM.Data.Migrations
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
             DropIndex("dbo.Transactions", new[] { "TransactionTypeId" });
             DropIndex("dbo.Transactions", new[] { "AccountId" });
-            DropIndex("dbo.Accounts", new[] { "UserId" });
+            DropIndex("dbo.Accounts", new[] { "AccountTypeId" });
+            DropIndex("dbo.Accounts", new[] { "CustomerId" });
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
-            DropTable("dbo.Users");
+            DropTable("dbo.Customers");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.LU_TransactionType");
             DropTable("dbo.Transactions");
+            DropTable("dbo.LU_AccountType");
             DropTable("dbo.Accounts");
         }
     }

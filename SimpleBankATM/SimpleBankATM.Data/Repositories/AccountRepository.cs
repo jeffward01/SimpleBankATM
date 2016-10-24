@@ -74,7 +74,8 @@ namespace SimpleBankATM.Data.Repositories
         public Account CreateAccount(Account account)
         {
             using (var context = new DataContext())
-            {
+            
+{
                 context.Accounts.Add(account);
                 context.SaveChanges();
                 return account;
