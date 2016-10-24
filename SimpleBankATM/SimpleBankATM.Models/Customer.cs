@@ -21,8 +21,8 @@ namespace SimpleBankATM.Models
 
         public string Password { get; set; }
 
-        public int SocialSecurityNumber { get; set; }
-        public DateTime? DateOfBirth { get; set; }
+        public string SocialSecurityNumber { get; set; }
+        public string DateOfBirth { get; set; }
 
         public virtual IList<Account> Accounts { get; set; }
     }

@@ -8,22 +8,36 @@ namespace SimpleBankATM.Console
 {
     public class Application : IApplication
     {
-        private readonly ICustomerRepository _userRepository;
+        private readonly ICustomerManager _customerManager;
 
         private readonly ITransactionManager _transactionManager;
 
         private readonly IAccountManager _accountManager;
 
-        public Application(ICustomerRepository userRepository, ITransactionManager transactionManager, IAccountManager accountManager)
+        public Application(ICustomerManager customerManager, ITransactionManager transactionManager, IAccountManager accountManager)
         {
-            _userRepository = userRepository;
+            _customerManager = customerManager;
             _transactionManager = transactionManager;
             _accountManager = accountManager;
         }
 
         public void Run()
         {
-            var newUser = new Customer();
+          var uiManager = new UIManager(_customerManager);
+            uiManager.DisplayWelcome();
+
+            //login
+            uiManager.DisplayLogin();
+        }
+    }
+}
+
+
+
+
+
+/* Test Info
+ *   var newUser = new Customer();
             newUser.FirstName = "Joe";
            // _userRepository.CreateUser(newUser);
             var createdUser = _userRepository.GetAllUsers();
@@ -65,7 +79,4 @@ namespace SimpleBankATM.Console
             var updatedAccount1 = _accountManager.GetAccountByAccountId(newAccount.AccountId);
             System.Console.WriteLine("newAccount :  " + updatedAccount1.AccountNumber + "   Routing: " + updatedAccount1.RoutingNumber + "  Balanace: (Should match above " + updatedAccount1.Balance);
 
-            System.Console.ReadLine();
-        }
-    }
-}
+            System.Console.ReadLine(); */
