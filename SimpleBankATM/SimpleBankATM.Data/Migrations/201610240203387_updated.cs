@@ -17,7 +17,6 @@ namespace SimpleBankATM.Data.Migrations
                         RoutingNumber = c.String(),
                         AccountTypeId = c.Int(nullable: false),
                         Balance = c.Int(nullable: false),
-                        TransactionCount = c.Int(nullable: false),
                         CreatedDate = c.DateTime(),
                         LastModifiedDate = c.DateTime(),
                         Deleted = c.DateTime(),

@@ -13,7 +13,7 @@ namespace SimpleBankATM.Data.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201610240101405_updated"; }
+            get { return "201610240203387_updated"; }
         }
         
         string IMigrationMetadata.Source

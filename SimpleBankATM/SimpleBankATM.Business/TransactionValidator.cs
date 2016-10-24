@@ -156,7 +156,7 @@ namespace SimpleBankATM.Business
             return true;
         }
 
-        private TransactionStatus WillAccountBeLessThan100(int transactionAmount)
+        public TransactionStatus WillAccountBeLessThan100(int transactionAmount)
         {
             var transactionStatus = new TransactionStatus();
             var afterTransaction = _accountInformation.Balance - transactionAmount;
@@ -172,7 +172,7 @@ namespace SimpleBankATM.Business
             return transactionStatus;
         }
 
-        private TransactionStatus IsWirthdrawlMoreThan90Percent(int transactionAmount)
+        public TransactionStatus IsWirthdrawlMoreThan90Percent(int transactionAmount)
         {
             var percent90OfBalence = Double.Parse(_accountInformation.Balance.ToString()) * .9;
             var transactionStatus = new TransactionStatus();
@@ -189,7 +189,7 @@ namespace SimpleBankATM.Business
             return transactionStatus;
         }
 
-        private TransactionStatus IsDepositMoreThanTenThousand(int transactionAmount)
+        public TransactionStatus IsDepositMoreThanTenThousand(int transactionAmount)
         {
             var transactionStatus = new TransactionStatus();
 
