@@ -23,7 +23,7 @@ namespace SimpleBankATM.Console
 
         public void Run()
         {
-          var uiManager = new UIManager(_customerManager);
+          var uiManager = new UIManager(_customerManager, _accountManager, _transactionManager);
             uiManager.DisplayWelcome();
 
             //login

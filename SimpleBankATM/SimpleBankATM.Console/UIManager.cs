@@ -6,10 +6,15 @@ namespace SimpleBankATM.Console
     public class UIManager
     {
         private readonly ICustomerManager _customerManager;
+        private readonly IAccountManager _accountManager;
 
-        public UIManager(ICustomerManager customerManager)
+        private readonly ITransactionManager _transactionManager;
+
+        public UIManager(ICustomerManager customerManager, IAccountManager accountManager, ITransactionManager transactionManager)
         {
             _customerManager = customerManager;
+            _accountManager = accountManager;
+            _transactionManager = transactionManager;
         }
 
         public void DisplayWelcome()
@@ -25,7 +30,8 @@ namespace SimpleBankATM.Console
             System.Console.Clear();
             System.Console.WriteLine("If you have an account and would like to login please type 'login'.  Otherwise, create a new account and type 'create' ");
             var input = System.Console.ReadLine().ToLower();
-            while (input != "create" || input != "login")
+            System.Console.WriteLine("You typed:  " + input);
+            if (input != "create" && input != "login")
             {
                 DisplayLogin();
             }
@@ -42,6 +48,7 @@ namespace SimpleBankATM.Console
 
         public void CreateAccount()
         {
+            System.Console.Clear();
             System.Console.WriteLine("Create a new Account");
             System.Console.WriteLine("Please enter FirstName");
             var firstName = System.Console.ReadLine();
@@ -71,6 +78,7 @@ namespace SimpleBankATM.Console
             if (result)
             {
                 //Save and go to account screen
+                SaveNewAccount(newCustomer);
             }
             else
             {
@@ -92,7 +100,7 @@ namespace SimpleBankATM.Console
             System.Console.WriteLine("Date of Birth (MM/DD/YYYY): " + customer.DateOfBirth);
 
             var result = System.Console.ReadLine().ToLower();
-            if (result != "y" || result != "n")
+            if (result != "y" && result != "n")
             {
                 CorrectNewCustomerInformation(customer);
             }
@@ -123,12 +131,14 @@ namespace SimpleBankATM.Console
 
         public void SaveNewAccount(Customer customer)
         {
+            System.Console.Clear();
+
             _customerManager.AddCustomer(customer);
             System.Console.WriteLine("New Customer has been saved!  Please login!  press enter to continue");
             System.Console.ReadLine();
+            System.Console.Clear();
+
             LoginToBank();
-            
-           
         }
 
         public void LoginToBank()
