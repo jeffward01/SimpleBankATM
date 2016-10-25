@@ -9,11 +9,13 @@ namespace SimpleBankATM.Data.Repositories
 {
     public class AccountRepository : IAccountRepository
     {
+
         private readonly DbContext _dataContext;
         public AccountRepository(IDbContextFactory factory)
         {
             _dataContext = factory.GetContext();
         }
+
         //GetAll
         public IList<Account> GetAllAccounts()
         {
@@ -29,13 +31,11 @@ namespace SimpleBankATM.Data.Repositories
             using (var context = new DataContext())
             {
                 return context.Accounts.FirstOrDefault(_ => _.AccountId == accountId);
-
             }
         }
 
         public Account GetAccountByAccountNumber(string accountNumber)
         {
-
             using (var context = new DataContext())
             {
                 return context.Accounts.FirstOrDefault(_ => _.AccountNumber == accountNumber);
@@ -62,7 +62,6 @@ namespace SimpleBankATM.Data.Repositories
         {
             using (var context = new DataContext())
             {
-
                 var account = context.Accounts.FirstOrDefault(_ => _.AccountNumber == accountNumber);
                 if (account == null)
                 {
@@ -79,8 +78,8 @@ namespace SimpleBankATM.Data.Repositories
         public Account CreateAccount(Account account)
         {
             using (var context = new DataContext())
-            
-{
+
+            {
                 context.Accounts.Add(account);
                 context.SaveChanges();
                 return account;
@@ -99,39 +98,10 @@ namespace SimpleBankATM.Data.Repositories
         }
 
         //Delete
-        public bool DeleteAccount(int accountId)
+        public bool DeleteAccount(Account account)
         {
             using (var context = new DataContext())
             {
-                var account = context.Accounts.FirstOrDefault(_ => _.AccountId == accountId);
-                if (account == null)
-                {
-                    return false;
-                }
-                try
-                {
-                    account.Deleted = DateTime.Now;
-                    context.SetModified(account);
-
-                    context.SaveChanges();
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-                return true;
-            }
-        }
-
-        public bool DeleteAccountByAccountNumber(string accountNumber)
-        {
-            using (var context = new DataContext())
-            {
-                var account = context.Accounts.FirstOrDefault(_ => _.AccountNumber == accountNumber);
-                if (account == null)
-                {
-                    return false;
-                }
                 try
                 {
                     account.Deleted = DateTime.Now;

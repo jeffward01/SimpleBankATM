@@ -17,12 +17,12 @@ namespace SimpleBankATM.Data.Repositories
 
         Account UpdateAccount(Account account);
 
-        bool DeleteAccount(int accountId);
+        bool DeleteAccount(Account account);
 
         string GetAccountIdByAccountNumber(string accountNumber);
 
         bool DoesAccountNumberExist(string accountNumber);
 
-        bool DeleteAccountByAccountNumber(string accountNumber);
+
     }
 }

@@ -42,7 +42,7 @@ namespace SimpleBankATM.Business.Managers
             return _transactionHandler.IsValidUpdateTransaction(transaction, transactionType);
         }
 
-        private Transaction CreateTransaction(int transactionAmount, int accountId, TransactionType transactionType)
+        public Transaction CreateTransaction(int transactionAmount, int accountId, TransactionType transactionType)
         {
             var newTransaction = new Transaction();
             newTransaction.AccountId = accountId;

@@ -18,10 +18,10 @@ namespace SimpleBankATM.Business
 
         private readonly TransactionType _transactionType;
 
-        public TransactionValidator(Transaction transaction, TransactionType transactionType)
+        public TransactionValidator(Transaction transaction, TransactionType transactionType, ITransactionRepository transactionRepository, IAccountRepository accountRepository)
         {
-            _accountRepository = new AccountRepository();
-            _transactionRepository = new TransactionRepository();
+            _accountRepository = accountRepository;
+            _transactionRepository = transactionRepository;
             _transactionAmount = transaction.TransactionAmount;
             _transactionInformation = transaction;
             _accountInformation = _accountRepository.GetAccountById(transaction.AccountId);

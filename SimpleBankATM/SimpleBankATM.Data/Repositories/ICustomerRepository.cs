@@ -20,5 +20,6 @@ namespace SimpleBankATM.Data.Repositories
         int GetNumberOfAccounts(int customerId);
 
         int GetSumOfAccounts(int customerId);
+        Customer GetCustomerByEmailAddress(string emailAddress);
     }
 }

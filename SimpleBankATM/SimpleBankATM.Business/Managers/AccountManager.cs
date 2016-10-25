@@ -22,7 +22,7 @@ namespace SimpleBankATM.Business.Managers
 
         public Account GetAccountByAccountId(int AccountId)
         {
-            var account =  _AccountRepository.GetAccountById(AccountId);
+            var account = _AccountRepository.GetAccountById(AccountId);
             return account;
         }
 
@@ -43,12 +43,14 @@ namespace SimpleBankATM.Business.Managers
 
         public bool DeleteAccount(int accountId)
         {
-            return _AccountRepository.DeleteAccount(accountId);
+            var account = GetAccountByAccountId(accountId);
+            return _AccountRepository.DeleteAccount(account);
         }
 
         public bool DeleteAccount(string accountNumber)
         {
-            return _AccountRepository.DeleteAccountByAccountNumber(accountNumber);
+            var account = GetAccountByAccountNumber(accountNumber);
+            return _AccountRepository.DeleteAccount(account);
         }
 
         public Account UpdateAccount(Account Account)
@@ -66,7 +68,9 @@ namespace SimpleBankATM.Business.Managers
             return newAccount;
         }
 
-        private string GenerateAccountNumber()
+         
+
+    private string GenerateAccountNumber()
         {
             var accountNumber = GenerateNumber();
           if (_AccountRepository.DoesAccountNumberExist(accountNumber))
