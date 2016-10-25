@@ -43,12 +43,14 @@ namespace SimpleBankATM.Business.Managers
 
         public bool DeleteAccount(int accountId)
         {
-            return _AccountRepository.DeleteAccount(accountId);
+            var account = GetAccountByAccountId(accountId);
+            return _AccountRepository.DeleteAccount(account);
         }
 
         public bool DeleteAccount(string accountNumber)
         {
-            return _AccountRepository.DeleteAccountByAccountNumber(accountNumber);
+            var account = GetAccountByAccountNumber(accountNumber);
+            return _AccountRepository.DeleteAccount(account);
         }
 
         public Account UpdateAccount(Account Account)

@@ -140,11 +140,11 @@ namespace SimpleBankATM.Tests
         }
 
         [Test]
-        public void ShouldReturnFalse_ISWithdrawGreaterThan90Percent()
+        public void ShouldReturnFalse_WithdrawGreaterThan90Percent()
         {
             var account = new Account();
             account.AccountId = 1;
-            account.Balance = 100;
+            account.Balance = 10000;
             account.CustomerId = 1;
 
             // Create test data
@@ -156,15 +156,43 @@ namespace SimpleBankATM.Tests
             var testTransRepo = A.Fake<ITransactionRepository>();
             var testAccountRepo = A.Fake<IAccountRepository>();
 
-            var transactionValidoat = new TransactionValidator(testData, TransactionType.Withdrawl, testTransRepo, testAccountRepo);
-
             A.CallTo(() => testAccountRepo.GetAccountById(A<int>.Ignored)).Returns(account);
 
+            var transactionValidoat = new TransactionValidator(testData, TransactionType.Withdrawl, testTransRepo, testAccountRepo);
+
             // Act
-            var result = transactionValidoat.IsWirthdrawlMoreThan90Percent(95);
+            var result = transactionValidoat.IsWirthdrawlMoreThan90Percent(9200);
 
             // Assert
             Assert.AreEqual(result.IsValid, false, "Should be false");
+        }
+
+        [Test]
+        public void ShouldReturnTrue_ISWithdrawLessThan90Percent()
+        {
+            var account = new Account();
+            account.AccountId = 1;
+            account.Balance = 10000;
+            account.CustomerId = 1;
+
+            // Create test data
+            var testData = new Transaction();
+            testData.TransactionAmount = 96;
+            testData.AccountId = 2;
+            testData.TransactionTypeId = 2;
+
+            var testTransRepo = A.Fake<ITransactionRepository>();
+            var testAccountRepo = A.Fake<IAccountRepository>();
+
+            A.CallTo(() => testAccountRepo.GetAccountById(A<int>.Ignored)).Returns(account);
+
+            var transactionValidoat = new TransactionValidator(testData, TransactionType.Withdrawl, testTransRepo, testAccountRepo);
+
+            // Act
+            var result = transactionValidoat.IsWirthdrawlMoreThan90Percent(8900);
+
+            // Assert
+            Assert.AreEqual(result.IsValid, true, "Should be true");
         }
     }
 }

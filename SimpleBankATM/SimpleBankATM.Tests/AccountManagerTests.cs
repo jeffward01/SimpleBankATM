@@ -4,8 +4,6 @@ using SimpleBankATM.Business.Managers;
 using SimpleBankATM.Data.Repositories;
 using SimpleBankATM.Models;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 
 namespace SimpleBankATM.Tests
@@ -16,23 +14,12 @@ namespace SimpleBankATM.Tests
         [Test]
         public void GetsAllAccounts_ReturnsExpected()
         {
-            var newCustomer = new Customer();
-            newCustomer.FirstName = "John";
-            newCustomer.LastName = "Doe";
-
-            // Create test data
             var testData = new List<Account>
             {
                 new Account {CustomerId = 1, Balance = 44, AccountTypeId = 1},
              new Account {CustomerId = 1, Balance = 500, AccountTypeId = 1},
             new Account {CustomerId = 1, Balance = 300, AccountTypeId = 2},
             };
-
-            // Arrange
-            var set =
-                A.Fake<DbSet<Account>>(
-                        o => o.Implements(typeof(IQueryable<Account>)).Implements(typeof(IDbAsyncEnumerable<Account>)))
-                    .AddRange(testData);
 
             var context = A.Fake<IAccountRepository>();
             A.CallTo(() => context.GetAllAccounts()).Returns(testData);
@@ -45,6 +32,20 @@ namespace SimpleBankATM.Tests
             // Assert
             Assert.AreEqual(3, accounts.Count(), "Should have 4");
             Assert.AreEqual(44, accounts.First().Balance, "Should be 44");
+        }
+
+        [Test]
+        public void GeneratesRandom10DigitNumber()
+        {
+            var fakeManager = A.Fake<AccountManager>();
+
+            // Act
+            var randomNumber = fakeManager.GenerateNumber();
+
+            // Assert
+            Assert.AreEqual(10, randomNumber.Count(), "Should be 10 digits long");
+            Assert.AreNotEqual(11, randomNumber.Count(), "Random number is 10 digits, not 11");
+            Assert.IsInstanceOf<string>(randomNumber, "Should be a string");
         }
     }
 }
