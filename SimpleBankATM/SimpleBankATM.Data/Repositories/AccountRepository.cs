@@ -2,13 +2,18 @@
 using SimpleBankATM.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace SimpleBankATM.Data.Repositories
 {
     public class AccountRepository : IAccountRepository
     {
-
+        private readonly DbContext _dataContext;
+        public AccountRepository(IDbContextFactory factory)
+        {
+            _dataContext = factory.GetContext();
+        }
         //GetAll
         public IList<Account> GetAllAccounts()
         {

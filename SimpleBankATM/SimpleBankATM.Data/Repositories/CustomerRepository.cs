@@ -2,6 +2,7 @@
 using SimpleBankATM.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace SimpleBankATM.Data.Repositories
@@ -14,6 +15,12 @@ namespace SimpleBankATM.Data.Repositories
         //Create new user
         //Edit user
         //Delete user
+        private readonly DbContext _dataContext;
+        public CustomerRepository(IDbContextFactory factory)
+        {
+            _dataContext = factory.GetContext();
+        }
+
 
         public IList<Customer> GetAllUsers()
         {
