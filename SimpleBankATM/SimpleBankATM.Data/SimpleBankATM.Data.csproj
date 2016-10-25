@@ -71,6 +71,10 @@
     <Compile Include="Migrations\201610240237217_updated one.Designer.cs">
       <DependentUpon>201610240237217_updated one.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201610240622285_Changed dataContext onheritatnce.cs" />
+    <Compile Include="Migrations\201610240622285_Changed dataContext onheritatnce.Designer.cs">
+      <DependentUpon>201610240622285_Changed dataContext onheritatnce.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccountRepository.cs" />
@@ -98,6 +102,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201610240237217_updated one.resx">
       <DependentUpon>201610240237217_updated one.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610240622285_Changed dataContext onheritatnce.resx">
+      <DependentUpon>201610240622285_Changed dataContext onheritatnce.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

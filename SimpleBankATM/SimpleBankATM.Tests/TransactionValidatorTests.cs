@@ -10,26 +10,23 @@ namespace SimpleBankATM.Tests
     public class TransactionValidatorTests
     {
         [Test]
-        public void ShouldReturnFalse_DepositGreaterThanTenThousand()
+        public void ShouldReturnFalse_DepositIsGreaterThanTenThousand()
         {
-            var newCustomer = new Customer();
-            newCustomer.FirstName = "John";
-            newCustomer.LastName = "Doe";
-
             var account = new Account();
-            account.AccountId = 2;
-            account.Balance = 5000;
+            account.AccountId = 1;
+            account.Balance = 100;
+            account.CustomerId = 1;
 
             // Create test data
             var testData = new Transaction();
-            testData.TransactionAmount = 10001;
+            testData.TransactionAmount = 96;
             testData.AccountId = 2;
-            testData.TransactionTypeId = 1;
+            testData.TransactionTypeId = 2;
 
             var testTransRepo = A.Fake<ITransactionRepository>();
-            testTransRepo.CreateTransaction(testData);
-
-            var transactionValidoat = new TransactionValidator(testData, TransactionType.Deposit);
+            var testAccountRepo = A.Fake<IAccountRepository>();
+            A.CallTo(() => testAccountRepo.GetAccountById(A<int>.Ignored)).Returns(account);
+            var transactionValidoat = new TransactionValidator(testData, TransactionType.Withdrawl, testTransRepo, testAccountRepo);
 
             // Act
             var result = transactionValidoat.IsDepositMoreThanTenThousand(10001);
@@ -39,26 +36,101 @@ namespace SimpleBankATM.Tests
         }
 
         [Test]
-        public void ShouldReturnFalse_BalanceFallBelow100()
+        public void ShouldReturnTrue_DepositIsTenThousand()
         {
-            var newCustomer = new Customer();
-            newCustomer.FirstName = "John";
-            newCustomer.LastName = "Doe";
-
             var account = new Account();
-            account.AccountId = 2;
+            account.AccountId = 1;
             account.Balance = 100;
+            account.CustomerId = 1;
 
             // Create test data
             var testData = new Transaction();
-            testData.TransactionAmount = 5;
+            testData.TransactionAmount = 96;
             testData.AccountId = 2;
             testData.TransactionTypeId = 2;
 
             var testTransRepo = A.Fake<ITransactionRepository>();
-            testTransRepo.CreateTransaction(testData);
+            var testAccountRepo = A.Fake<IAccountRepository>();
+            A.CallTo(() => testAccountRepo.GetAccountById(A<int>.Ignored)).Returns(account);
+            var transactionValidoat = new TransactionValidator(testData, TransactionType.Withdrawl, testTransRepo, testAccountRepo);
 
-            var transactionValidoat = new TransactionValidator(testData, TransactionType.Deposit);
+            // Act
+            var result = transactionValidoat.IsDepositMoreThanTenThousand(10000);
+
+            // Assert
+            Assert.AreEqual(result.IsValid, true, "Should be true");
+        }
+
+        [Test]
+        public void ShouldReturnTrue_DepositIsLessThanTenThousand()
+        {
+            var account = new Account();
+            account.AccountId = 1;
+            account.Balance = 100;
+            account.CustomerId = 1;
+
+            // Create test data
+            var testData = new Transaction();
+            testData.TransactionAmount = 96;
+            testData.AccountId = 2;
+            testData.TransactionTypeId = 2;
+
+            var testTransRepo = A.Fake<ITransactionRepository>();
+            var testAccountRepo = A.Fake<IAccountRepository>();
+
+            A.CallTo(() => testAccountRepo.GetAccountById(A<int>.Ignored)).Returns(account);
+            var transactionValidoat = new TransactionValidator(testData, TransactionType.Withdrawl, testTransRepo, testAccountRepo);
+
+            // Act
+            var result = transactionValidoat.IsDepositMoreThanTenThousand(1000);
+
+            // Assert
+            Assert.AreEqual(result.IsValid, true, "Should be true");
+        }
+
+        [Test]
+        public void ShouldReturnTrue_BalanceWillNotFallBelow100()
+        {
+            var account = new Account();
+            account.AccountId = 1;
+            account.Balance = 500;
+            account.CustomerId = 1;
+
+            // Create test data
+            var testData = new Transaction();
+            testData.TransactionAmount = 96;
+            testData.AccountId = 1;
+
+            var testTransRepo = A.Fake<ITransactionRepository>();
+            var testAccountRepo = A.Fake<IAccountRepository>();
+            A.CallTo(() => testAccountRepo.GetAccountById(A<int>.Ignored)).Returns(account);
+
+            var transactionValidoat = new TransactionValidator(testData, TransactionType.Withdrawl, testTransRepo, testAccountRepo);
+
+            // Act
+            var result = transactionValidoat.WillAccountBeLessThan100(1);
+
+            // Assert
+            Assert.AreEqual(result.IsValid, true, "Should be true");
+        }
+
+        [Test]
+        public void ShouldReturnFalse_BalanceFallBelow100()
+        {
+            var account = new Account();
+            account.AccountId = 1;
+            account.Balance = 5;
+            account.CustomerId = 1;
+
+            // Create test data
+            var testData = new Transaction();
+            testData.TransactionAmount = 96;
+            testData.AccountId = 1;
+
+            var testTransRepo = A.Fake<ITransactionRepository>();
+            var testAccountRepo = A.Fake<IAccountRepository>();
+            A.CallTo(() => testAccountRepo.GetAccountById(A<int>.Ignored)).Returns(account);
+            var transactionValidoat = new TransactionValidator(testData, TransactionType.Withdrawl, testTransRepo, testAccountRepo);
 
             // Act
             var result = transactionValidoat.WillAccountBeLessThan100(5);
@@ -70,13 +142,10 @@ namespace SimpleBankATM.Tests
         [Test]
         public void ShouldReturnFalse_ISWithdrawGreaterThan90Percent()
         {
-            var newCustomer = new Customer();
-            newCustomer.FirstName = "John";
-            newCustomer.LastName = "Doe";
-
             var account = new Account();
-            account.AccountId = 2;
+            account.AccountId = 1;
             account.Balance = 100;
+            account.CustomerId = 1;
 
             // Create test data
             var testData = new Transaction();
@@ -85,9 +154,11 @@ namespace SimpleBankATM.Tests
             testData.TransactionTypeId = 2;
 
             var testTransRepo = A.Fake<ITransactionRepository>();
-            testTransRepo.CreateTransaction(testData);
+            var testAccountRepo = A.Fake<IAccountRepository>();
 
-            var transactionValidoat = new TransactionValidator(testData, TransactionType.Deposit);
+            var transactionValidoat = new TransactionValidator(testData, TransactionType.Withdrawl, testTransRepo, testAccountRepo);
+
+            A.CallTo(() => testAccountRepo.GetAccountById(A<int>.Ignored)).Returns(account);
 
             // Act
             var result = transactionValidoat.IsWirthdrawlMoreThan90Percent(95);

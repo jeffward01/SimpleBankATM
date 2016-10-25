@@ -4,6 +4,7 @@ using SimpleBankATM.Models;
 using System;
 using System.ComponentModel;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using SimpleBankATM.Data.Infrastructure;
 using SimpleBankATM.Models.LookupModels;
 
@@ -15,7 +16,7 @@ namespace SimpleBankATM.Data.Infrastructure
     using LU_AccountTypeonfig = System.Data.Entity.ModelConfiguration.EntityTypeConfiguration<LU_AccountType>;
 
 
-    public class DataContext : IdentityDbContext<IdentityUser>, IDataContext
+    public class DataContext : DbContext, IDataContext //IdentityDbContext<IdentityUser>,
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -32,7 +33,7 @@ namespace SimpleBankATM.Data.Infrastructure
         }
 
         public IDbSet<Customer> Users { get; set; }
-        public IDbSet<Account> Accounts { get; set; }
+        public DbSet<Account> Accounts { get; set; }
         public IDbSet<Transaction> Transactions { get; set; }
 
         public void SetModified(object entity)

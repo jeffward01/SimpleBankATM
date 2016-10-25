@@ -8,7 +8,7 @@ namespace SimpleBankATM.Data.Infrastructure
     {
         IDbSet<Customer> Users { get; set; }
         IDbSet<Transaction> Transactions { get; set; }
-        IDbSet<Account> Accounts { get; set; }
+        DbSet<Account> Accounts { get; set; }
 
         int SaveChanges();
 
