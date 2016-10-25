@@ -38,9 +38,45 @@ namespace SimpleBankATM.Business.Managers
             return _customerRepository.DeleteUser(customerID);
         }
 
+        public Customer GetCustomerByEmailAddress(string email)
+        {
+            return _customerRepository.GetCustomerByEmailAddress(email);
+        }
+
         public Customer UodateCustomer(Customer customer)
         {
             return _customerRepository.UpdateUser(customer);
+        }
+
+        public bool LogIn(string emailAddress, string password)
+        {
+            var customer = GetCustomerByEmailAddress(emailAddress);
+            var dbPassword = customer.Password;
+            if (customer != null)
+            {
+                var result = IsMatch(password, dbPassword);
+                if (result)
+                {
+                    AuthenticationManager.Login(customer);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool LogOut()
+        {
+            AuthenticationManager.LogOut();
+            return true;
+        }
+
+        private bool IsMatch(string password, string confirmPassword)
+        {
+            if (confirmPassword == password)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

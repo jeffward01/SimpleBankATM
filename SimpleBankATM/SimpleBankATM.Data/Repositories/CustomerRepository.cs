@@ -19,7 +19,15 @@ namespace SimpleBankATM.Data.Repositories
         {
             using (var context = new DataContext())
             {
-                return context.Users.Where(_ => _.Deleted == null).ToList();
+                return context.Customers.Where(_ => _.Deleted == null).ToList();
+            }
+        }
+
+        public Customer GetCustomerByEmailAddress(string emailAddress)
+        {
+            using (var context = new DataContext())
+            {
+                return context.Customers.FirstOrDefault(_ => _.EmailAddress == emailAddress);
             }
         }
 
@@ -27,7 +35,7 @@ namespace SimpleBankATM.Data.Repositories
         {
             using (var context = new DataContext())
             {
-                return context.Users.FirstOrDefault(_ => _.CustomerId == userId);
+                return context.Customers.FirstOrDefault(_ => _.CustomerId == userId);
             }
         }
 
@@ -36,7 +44,7 @@ namespace SimpleBankATM.Data.Repositories
             using (var context = new DataContext())
             {
                 user.CreatedDate = DateTime.Now;
-                context.Users.Add(user);
+                context.Customers.Add(user);
                 try
                 {
                     context.SaveChanges();
@@ -74,7 +82,7 @@ namespace SimpleBankATM.Data.Repositories
             {
                 context.SetModified(user);
                 context.SaveChanges();
-                return context.Users.FirstOrDefault(_ => _.CustomerId == user.CustomerId);
+                return context.Customers.FirstOrDefault(_ => _.CustomerId == user.CustomerId);
             }
       
         }
@@ -101,7 +109,7 @@ namespace SimpleBankATM.Data.Repositories
         {
             using (var context = new DataContext())
             {
-                var user = context.Users.FirstOrDefault(_ => _.CustomerId == userId);
+                var user = context.Customers.FirstOrDefault(_ => _.CustomerId == userId);
                 if (user == null)
                 {
                     return false;

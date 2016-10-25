@@ -32,7 +32,7 @@ namespace SimpleBankATM.Data.Infrastructure
             }
         }
 
-        public IDbSet<Customer> Users { get; set; }
+        public IDbSet<Customer> Customers { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public IDbSet<Transaction> Transactions { get; set; }
 

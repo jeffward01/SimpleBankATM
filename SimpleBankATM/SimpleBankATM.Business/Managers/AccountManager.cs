@@ -22,7 +22,7 @@ namespace SimpleBankATM.Business.Managers
 
         public Account GetAccountByAccountId(int AccountId)
         {
-            var account =  _AccountRepository.GetAccountById(AccountId);
+            var account = _AccountRepository.GetAccountById(AccountId);
             return account;
         }
 
@@ -68,7 +68,9 @@ namespace SimpleBankATM.Business.Managers
             return newAccount;
         }
 
-        private string GenerateAccountNumber()
+         
+
+    private string GenerateAccountNumber()
         {
             var accountNumber = GenerateNumber();
           if (_AccountRepository.DoesAccountNumberExist(accountNumber))
